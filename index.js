@@ -165,23 +165,35 @@ app.put("/update/:id",async(req,res)=>{
 
 app.get("/dashBoardData",async(req,res)=>{
 
+const demoArr = ["Strategy","Finance","Quality","Maintenance","Stores","HR"]
    const data = await Project.aggregate([
         {$group : {
             _id : "$Status",
             Status :{$count:{}}
         }}
     ])
-    const obj = await Project.aggregate([{$count:"Status"}])
-    data.push(obj[0]);
-    res.send(data)
-})
 
-app.post("/getVizData",async(req, res)=>{
-    console.log(req.body)
-    let demoArr = new Array()
+
+    
+
+    const date = new Date
+    const dt = await Project.aggregate([
+        {$match:{$and:[{Status : "Running"},{EndDate:{$lt:date}}]}},
+        {$count:"Status"}
+    ])
+    data.push({
+        "_id":"Closure",
+        "Status":dt[0].Status
+    })
+
+    const obj = (await Project.find()).length
+    console.log(obj)
+    data.push({
+        "_id" : "Total Projects",
+        "Status" : obj
+    });
+
     let ans = new Array()
-
-    demoArr = req.body
 
     // const data = await Project.aggregate([
     //     {$group : {
@@ -206,7 +218,7 @@ app.post("/getVizData",async(req, res)=>{
             Total : dataFirst[0].Status,
             Closed : 0
         })
-    const data = await Project.aggregate([
+    const dataG = await Project.aggregate([
         {$match:{$and:[{Department:item},{Status:"Closed"}]}},
         {$count:"Status"},
         {
@@ -215,16 +227,25 @@ app.post("/getVizData",async(req, res)=>{
 
     ])
         const i = ans.findIndex((word)=>{
-            if(data.length !== 0){
+            if(dataG.length !== 0){
                 // console.log(data[0].Department)
-                return word.name === data[0].Department
+                return word.name === dataG[0].Department
             }
         })
         if(i !== -1){
-            ans[i].Closed = data[0].Status
+            ans[i].Closed = dataG[0].Status
         }
     }))
-    res.send(ans)
+    
+    res.send({
+        "CountData" : data,
+        "GraphData":  ans
+    })
+})
+
+app.post("/getVizData",async(req, res)=>{
+    console.log(req.body)
+    
 })
 
 app.listen(port, (req, res) =>{
