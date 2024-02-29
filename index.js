@@ -166,7 +166,7 @@ app.put("/update/:id",async(req,res)=>{
 app.get("/dashBoardData",async(req,res)=>{
 
 const demoArr = ["Strategy","Finance","Quality","Maintenance","Stores","HR"]
-   const data = await Project.aggregate([
+    var data = await Project.aggregate([
         {$group : {
             _id : "$Status",
             Status :{$count:{}}
@@ -174,7 +174,7 @@ const demoArr = ["Strategy","Finance","Quality","Maintenance","Stores","HR"]
     ])
 
 
-    
+    console.log(data)
 
     const date = new Date
     const dt = await Project.aggregate([
@@ -236,6 +236,8 @@ const demoArr = ["Strategy","Finance","Quality","Maintenance","Stores","HR"]
             ans[i].Closed = dataG[0].Status
         }
     }))
+
+    data = data.filter((ele)=> ele._id !== "Registered")
     
     res.send({
         "CountData" : data,
@@ -243,10 +245,13 @@ const demoArr = ["Strategy","Finance","Quality","Maintenance","Stores","HR"]
     })
 })
 
-app.post("/getVizData",async(req, res)=>{
-    console.log(req.body)
-    
-})
+// app.get("/search/:word",async(req, res)=>{
+//     console.log(req.params.word)
+//     const data = await Project.find(
+//         {ProjectTheme:{$regex:req.params.word,$c}}
+//     );
+//     console.log(data)
+// })
 
 app.listen(port, (req, res) =>{
     console.log("server is running");
