@@ -4,29 +4,15 @@ const port = 8000;
 const app = express();
 const bodyParser = require("body-parser");
 app.use(express.json());
-const fs = require("fs")
 const UserDemo = require("../apiBack/models/users");
 const Project = require("../apiBack/models/projectData");
 const mongoose  = require("mongoose");
-const { error } = require("console");
-const { type } = require("os");
 app.use(cors())
 app.use(bodyParser.urlencoded({extended:true}))
 mongoose.connect("mongodb+srv://rushivairale:hMhBAmtpe6MXrk4w@cluster0.mi0lpr7.mongodb.net/kshitijArtsDB?retryWrites=true&w=majority");
 
-// const user = new UserDemo({
-//     email :"leenavairale932@gmail.com",
-//     password : "12345"
-// })
-
-// user.save();
 
 app.post('/',async(req,res)=> {
-
-    // const user = UserDemo.findOne({
-    //     email : req.body.email
-    // })
-    // console.log(user.schema.obj.password)
     
     
         console.log("im in")
@@ -195,13 +181,6 @@ const demoArr = ["Strategy","Finance","Quality","Maintenance","Stores","HR"]
 
     let ans = new Array()
 
-    // const data = await Project.aggregate([
-    //     {$group : {
-    //         _id : "$Department",
-    //         Status :{$count:{}}
-    //     }}
-    // ])
-
     
     await Promise.all(demoArr.map(async(item)=>{
     const dataFirst = await Project.aggregate([
@@ -244,14 +223,6 @@ const demoArr = ["Strategy","Finance","Quality","Maintenance","Stores","HR"]
         "GraphData":  ans
     })
 })
-
-// app.get("/search/:word",async(req, res)=>{
-//     console.log(req.params.word)
-//     const data = await Project.find(
-//         {ProjectTheme:{$regex:req.params.word,$c}}
-//     );
-//     console.log(data)
-// })
 
 app.listen(port, (req, res) =>{
     console.log("server is running");
