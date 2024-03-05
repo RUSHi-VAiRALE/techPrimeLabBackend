@@ -13,9 +13,7 @@ mongoose.connect("mongodb+srv://rushivairale:hMhBAmtpe6MXrk4w@cluster0.mi0lpr7.m
 
 
 app.post('/',async(req,res)=> {
-    
-    
-        console.log("im in")
+
         await UserDemo.findOne({
             email : req.body.email
         })
@@ -40,9 +38,9 @@ app.post('/',async(req,res)=> {
 
 app.post("/createProject",async(req,res)=>{
     console.log(req.body)
-    const date = req.body.startDate
-    toString(date)
-    console.log(date)
+    // const date = req.body.startDate
+    // toString(date)
+    // console.log(date)
     const project = new Project({
         ProjectTheme : req.body.projectTheme,
         Reason : req.body.Reason,
