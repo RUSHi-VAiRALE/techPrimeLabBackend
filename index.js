@@ -72,7 +72,6 @@ app.get("/getProject",async(req,res)=>{
 app.get("/sort/:sortParam",async(req,res)=>{
     let arrayData = new Array();
     const sortP = ""+req.params.sortParam
-    console.log(sortP)
     await Project.find()
     .then((data)=>{
             arrayData = data
